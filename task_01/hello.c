@@ -15,13 +15,13 @@ MODULE_VERSION("1.0");
 
 static int __init start(void)
 {
-	printk(KERN_INFO "Hello, world!\n");
+	pr_debug("Hello, world!\n");
 	return 0;
 }
 
 static void __exit end(void)
 {
-	printk(KERN_INFO "Goodbye, cruel world!\n");
+	pr_debug("Goodbye, cruel world!\n");
 }
 
 module_init(start);
