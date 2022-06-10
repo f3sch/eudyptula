@@ -20,3 +20,32 @@ just respond to the task with the answers and all should be fine.
 
 If you forgot, your id is "YOUR_ID".  But of course you have not
 forgotten that yet, you are better than that.
+
+# Solution
+----------
+<details>
+<summary>Notes:</summary>
+<br>
+
+There are some basic information the kernel requires before loading the module:
+```c
+MODULE_LICENSE("GPL");
+MODULE_AUTHOR("Name");
+MODULE_DESCRIPTION("Description");
+MODULE_VERSION("1.0");
+```
+
+Next are the entry and exit macros, which point to specific functions:
+```c
+module_init(...);
+module_exit(...);
+```
+
+Notes use these to insert the module into the kernel. (This taints the kernel.)
+```
+sudo insmod hello.ko
+sudo rmmod hello
+```
+
+
+</details>

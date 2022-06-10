@@ -6,3 +6,4 @@
 *.cmd
 *.mod.c
 *.mod.o
+.cache
