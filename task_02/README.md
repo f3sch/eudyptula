@@ -59,9 +59,10 @@ scripts/config --disable DEBUG_INFO
 scripts/config --disable DEBUG_INFO_BTF
 scripts/config --disable SYSTEM_TRUSTED_KEYS
 scripts/config --set-str SYSTEM_TRUSTED_KEYS ""
-scripts/config --disable LOCALVERSION_AUTO          # <- Challenge requirement!!!
+scripts/config --enable LOCALVERSION_AUTO          # <- Challenge requirement!!!
 make $(nproc)
 make install
+make module_install
 reboot
 ```
 
