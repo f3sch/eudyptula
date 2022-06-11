@@ -1,0 +1,26 @@
+From 38defcb08cf42b880cb718dfe89ebbf279964ba7 Mon Sep 17 00:00:00 2001
+From: Felix Schlepper <f3sch.git@outlook.com>
+Date: Sat, 11 Jun 2022 07:57:04 +0200
+Subject: [PATCH] Changed EXTRAVERSION for task_03
+
+Signed-off-by: Felix Schlepper <f3sch.git@outlook.com>
+---
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index b2e93c1a8021..9f0eb7608845 100644
+--- a/Makefile
++++ b/Makefile
+@@ -2,7 +2,7 @@
+ VERSION = 5
+ PATCHLEVEL = 19
+ SUBLEVEL = 0
+-EXTRAVERSION = -rc1
++EXTRAVERSION = -eudyptula
+ NAME = Superb Owl
+ 
+ # *DOCUMENTATION*
+-- 
+2.25.1
+
