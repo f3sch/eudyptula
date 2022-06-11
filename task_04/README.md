@@ -51,3 +51,51 @@ As always, please remember to use your ID in the subject line when
 responding to this task, so that I can figure out who to attribute it
 to.  And if you forgot (which of course you have not, we've been through
 all of this before), your id is "YOUR_ID".
+
+
+# Solution
+----------
+<details>
+<summary>Notes:</summary>
+<br>
+I ran checkpatch.pl on these files:
+
+hello.c:
+```
+hello.c:1: WARNING: Missing or malformed SPDX-License-Identifier tag in line 1
+total: 0 errors, 1 warnings, 28 lines checked
+```
+Ignore license identifier.
+
+coding_style.c:
+```
+coding_style.c:1: WARNING: Missing or malformed SPDX-License-Identifier tag in line 1
+coding_style.c:3: ERROR: "foo * bar" should be "foo *bar"
+coding_style.c:3: ERROR: open brace '{' following function definitions go on the next line
+coding_style.c:3: ERROR: spaces required around that '=' (ctx:VxO)
+coding_style.c:3: ERROR: space required before that '*' (ctx:OxV)
+coding_style.c:3: ERROR: space prohibited after that open parenthesis '('
+coding_style.c:3: ERROR: space prohibited before that close parenthesis ')'
+coding_style.c:5: ERROR: spaces required around that '=' (ctx:VxV)
+coding_style.c:5: ERROR: space required after that ';' (ctx:VxV)
+coding_style.c:5: ERROR: spaces required around that '<' (ctx:VxW)
+coding_style.c:5: ERROR: space prohibited after that '*' (ctx:WxW)
+coding_style.c:5: ERROR: space required after that ';' (ctx:VxO)
+coding_style.c:5: ERROR: space required before the open parenthesis '('
+coding_style.c:5: WARNING: braces {} are not necessary for single statement blocks
+coding_style.c:9: ERROR: space prohibited before that close parenthesis ')'
+coding_style.c:11: WARNING: printk() should include KERN_<LEVEL> facility level
+coding_style.c:19: ERROR: open brace '{' following function definitions go on the next line
+coding_style.c:19: WARNING: space prohibited between function name and open parenthesis '('
+coding_style.c:27: ERROR: space prohibited after that open parenthesis '('
+coding_style.c:27: ERROR: space prohibited before that close parenthesis ')'
+total: 16 errors, 4 warnings, 29 lines checked
+```
+
+I fixed both with running clang-format on these files.
+Check commit history for changes.
+
+Note:
+        I had to add license information to coding_style.c for it to compile.
+
+</details>
