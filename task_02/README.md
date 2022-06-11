@@ -62,8 +62,6 @@ scripts/config --set-str SYSTEM_TRUSTED_KEYS ""
 scripts/config --disable LOCALVERSION_AUTO          # <- Challenge requirement!!!
 make $(nproc)
 make install
-update-initramfs -c -k KERNEL_VERSION
-update-grub
 reboot
 ```
 
