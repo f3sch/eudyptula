@@ -30,3 +30,27 @@ The tasks this time are:
 
 As you will be putting your id into the kernel module, of course you
 haven't forgotten it, but just to be safe, it's "YOUR_ID".
+
+# Solution
+----------
+<details>
+<summary>Notes:</summary>
+<br>
+
+test output:
+```bash
+Received Eudyptula
+Wrote Eudyptula
+```
+
+dmesg -W output:
+```bash
+[ 9044.233703] Eduyptula: Read: len not right!
+[ 9044.233714] Eduyptula: Write: eudyptula did not match Eudyptula!
+[ 9044.233715] Eduyptula: Write: len not right!
+[ 9711.913794] Eudyptula: Deregister misc device driver!
+```
+
+
+</details>
+
