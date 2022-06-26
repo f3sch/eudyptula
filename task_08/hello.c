@@ -5,6 +5,7 @@
  */
 
 #include <linux/init.h>
+#include <linux/debugfs.h>
 #include <linux/kernel.h>
 #include <linux/module.h>
 
@@ -59,13 +60,29 @@ static const struct file_operations fops = {
 
 static int __init start(void)
 {
-	pr_debug("Hello, world!\n");
+	struct dentry *id;
+	dbgfs = debugfs_create_dir("eudyptula", NULL);
+	if (!dbgfs) {
+		pr_err("Could not create debugfs dir!\n");
+		return -ENODEV;
+	}
+
+	id = debugfs_create_file("id", S_IRWXU, dbgfs, (void *)name_buf, &fops);
+	if (!id) {
+		pr_err("Could not create id file!\n");
+		goto err_id;
+	}
+
 	return 0;
+
+err_id:
+	debugfs_remove_recursive(dbgfs);
+	return -ENODEV;
 }
 
 static void __exit end(void)
 {
-	pr_debug("Goodbye, cruel world!\n");
+	debugfs_remove_recursive(dbgfs);
 }
 
 module_init(start);
