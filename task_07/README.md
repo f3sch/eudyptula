@@ -27,3 +27,22 @@ do it.
 As always, please respond to this challenge with your id.  I know you
 know what it is.  I'll not even include it this time, I trust you.
 Don't make me feel that is a mistake.
+
+# Solution
+----------
+<details>
+<summary>Notes:</summary>
+<br>
+## Kernel Development Process
+
+A development cycle:
+1. 2 weeks _merge window_
+2. Linus declares the window closed. Stablilzing the kernel has begun. New -rcX version every week (6-10).
+
+## How does a patch get into the kernel
+
+The codebase is logically broken down into a set of subsystems.
+Each has a designated Maintainer.
+Maintainers have Lieutenants, whom they trust.
+
+</details>
