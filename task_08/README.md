@@ -61,3 +61,11 @@ Or, even better:
           └─>[YOUR_ID] [PATCH 02/02] Task 08: add foo file
 
 Hint, look at using 'git send-email' as a way to send these files out.
+
+# Solution
+----------
+<details>
+<summary>Notes:</summary>
+<br>
+
+</details>
