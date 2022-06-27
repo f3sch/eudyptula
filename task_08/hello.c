@@ -4,11 +4,17 @@
  * @brief Hello, world from Linux Kernel.
  */
 
-#include <linux/init.h>
 #include <linux/debugfs.h>
+#include <linux/fs.h>
+#include <linux/init.h>
 #include <linux/kernel.h>
+#include <linux/miscdevice.h>
 #include <linux/module.h>
-#include <linux/jiffies.h>
+#include <linux/mutex.h>
+#include <linux/proc_fs.h>
+#include <linux/uaccess.h>
+#include <linux/slab.h>
+#include <linux/string.h>
 
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Felix Schlepper");
@@ -26,10 +32,7 @@ static ssize_t eduyptula_write(struct file *file, const char __user *buf,
 {
 	char ebuf[YOUR_ID_LEN];
 
-	if (copy_from_user(ebuf, buf, len)) {
-		pr_debug("Eduyptula: Write: Could not copy from user space!\n");
-		return -EFAULT;
-	}
+	simple_write_to_buffer(ebuf, len, ppos, buf, len);
 
 	// cmp strings
 	for (int i = 0; i < YOUR_ID_LEN; ++i) {
@@ -46,12 +49,7 @@ static ssize_t eduyptula_write(struct file *file, const char __user *buf,
 static ssize_t eduyptula_read(struct file *file, char __user *buf, size_t len,
 			      loff_t *ppos)
 {
-	if (copy_to_user(buf, name_buf, YOUR_ID_LEN)) {
-		pr_debug("Eduyptula: Read: Could not copy to user space!\n");
-		return -EFAULT;
-	}
-
-	return YOUR_ID_LEN;
+	return simple_read_from_buffer(buf, len, ppos, name_buf, YOUR_ID_LEN);
 }
 
 static const struct file_operations efops = {
@@ -70,12 +68,7 @@ static ssize_t jiffies_read(struct file *file, char __user *buf, size_t len,
 			    loff_t *ppos)
 {
 	sprintf(jbuf, "%lu", jiffies);
-	if (copy_to_user(buf, jbuf, sizeof(jiffies))) {
-		pr_debug("Jiffies: Read: Could not copy to user space!\n");
-		return -EFAULT;
-	}
-
-	return sizeof(jiffies);
+	return simple_read_from_buffer(buf, len, ppos, jbuf, sizeof(jiffies));
 }
 
 static const struct file_operations jfops = {
