@@ -26,6 +26,8 @@ static char name_buf[YOUR_ID_LEN] =
 	"Eudyptula"; // I don't have an id, just using this
 static struct dentry *dbgfs; // global parent
 static char jbuf[sizeof(jiffies)];
+static DEFINE_MUTEX(foo_sem);
+static char fmsg[PAGE_SIZE];
 
 static ssize_t eduyptula_write(struct file *file, const char __user *buf,
 			       size_t len, loff_t *ppos)
@@ -77,9 +79,43 @@ static const struct file_operations jfops = {
 	.read = jiffies_read,
 };
 
+static ssize_t foo_write(struct file *file, const char __user *buf, size_t count,
+			 loff_t *ppos)
+{
+	ssize_t len;
+
+	mutex_lock(&foo_sem);
+
+	len = simple_write_to_buffer(fmsg, PAGE_SIZE, ppos, buf, count);
+
+	mutex_unlock(&foo_sem);
+
+	return len;
+}
+
+static ssize_t foo_read(struct file *file, char __user *buf, size_t len,
+			loff_t *ppos)
+{
+	int ret = -EINVAL;
+
+	mutex_lock(&foo_sem);
+
+	ret = simple_read_from_buffer(buf, len, ppos, fmsg, strlen(fmsg));
+
+	mutex_unlock(&foo_sem);
+
+	return ret;
+}
+
+static const struct file_operations ffops = {
+	.owner = THIS_MODULE,
+	.write = foo_write,
+	.read = foo_read,
+};
+
 static int __init start(void)
 {
-	struct dentry *id, *jif;
+	struct dentry *id, *jif, *foo;
 	dbgfs = debugfs_create_dir("eudyptula", NULL);
 	if (!dbgfs) {
 		pr_err("Could not create debugfs dir!\n");
@@ -95,6 +131,12 @@ static int __init start(void)
 
 	jif = debugfs_create_file("jiffies", S_IRUSR | S_IROTH, dbgfs,
 				  (void *)jbuf, &jfops);
+	if (!jif) {
+		pr_err("Could not create id file!\n");
+		goto err_id;
+	}
+
+	foo = debugfs_create_file("foo", S_IRUSR | S_IROTH, dbgfs, NULL, &ffops);
 	if (!jif) {
 		pr_err("Could not create id file!\n");
 		goto err_id;
