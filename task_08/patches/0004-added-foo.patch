@@ -1,0 +1,87 @@
+From 01a995cdef5aed86ee8a3ac0272f03979b4a20ab Mon Sep 17 00:00:00 2001
+Message-Id: <01a995cdef5aed86ee8a3ac0272f03979b4a20ab.1656336664.git.f3sch.git@outlook.com>
+In-Reply-To: <586f14a1bdee669e8603c065049b462eabce8686.1656336664.git.f3sch.git@outlook.com>
+References: <586f14a1bdee669e8603c065049b462eabce8686.1656336664.git.f3sch.git@outlook.com>
+From: Felix Schlepper <f3sch.git@outlook.com>
+Date: Mon, 27 Jun 2022 15:27:04 +0200
+Subject: [PATCH 4/4] added foo
+
+Signed-off-by: Felix Schlepper <f3sch.git@outlook.com>
+---
+ task_08/hello.c | 44 +++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 43 insertions(+), 1 deletion(-)
+
+diff --git a/task_08/hello.c b/task_08/hello.c
+index b74f281..8d93714 100644
+--- a/task_08/hello.c
++++ b/task_08/hello.c
+@@ -26,6 +26,8 @@ static char name_buf[YOUR_ID_LEN] =
+ 	"Eudyptula"; // I don't have an id, just using this
+ static struct dentry *dbgfs; // global parent
+ static char jbuf[sizeof(jiffies)];
++static DEFINE_MUTEX(foo_sem);
++static char fmsg[PAGE_SIZE];
+ 
+ static ssize_t eduyptula_write(struct file *file, const char __user *buf,
+ 			       size_t len, loff_t *ppos)
+@@ -77,9 +79,43 @@ static const struct file_operations jfops = {
+ 	.read = jiffies_read,
+ };
+ 
++static ssize_t foo_write(struct file *file, const char __user *buf, size_t count,
++			 loff_t *ppos)
++{
++	ssize_t len;
++
++	mutex_lock(&foo_sem);
++
++	len = simple_write_to_buffer(fmsg, PAGE_SIZE, ppos, buf, count);
++
++	mutex_unlock(&foo_sem);
++
++	return len;
++}
++
++static ssize_t foo_read(struct file *file, char __user *buf, size_t len,
++			loff_t *ppos)
++{
++	int ret = -EINVAL;
++
++	mutex_lock(&foo_sem);
++
++	ret = simple_read_from_buffer(buf, len, ppos, fmsg, strlen(fmsg));
++
++	mutex_unlock(&foo_sem);
++
++	return ret;
++}
++
++static const struct file_operations ffops = {
++	.owner = THIS_MODULE,
++	.write = foo_write,
++	.read = foo_read,
++};
++
+ static int __init start(void)
+ {
+-	struct dentry *id, *jif;
++	struct dentry *id, *jif, *foo;
+ 	dbgfs = debugfs_create_dir("eudyptula", NULL);
+ 	if (!dbgfs) {
+ 		pr_err("Could not create debugfs dir!\n");
+@@ -100,6 +136,12 @@ static int __init start(void)
+ 		goto err_id;
+ 	}
+ 
++	foo = debugfs_create_file("foo", S_IRUSR | S_IROTH, dbgfs, NULL, &ffops);
++	if (!jif) {
++		pr_err("Could not create id file!\n");
++		goto err_id;
++	}
++
+ 	return 0;
+ 
+ err_id:
+-- 
+2.36.1
+

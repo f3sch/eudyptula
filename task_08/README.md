@@ -68,4 +68,13 @@ Hint, look at using 'git send-email' as a way to send these files out.
 <summary>Notes:</summary>
 <br>
 
+Patches:
+(Patch 1)[patches/0001-added-debugfs.patch]
+(Patch 2)[patches/0002-Added-jiffies.patch]
+(Patch 3)[patches/0003-CARFULL-NOT-IN-COMPLIANCE-WITH-CHALLENGE.patch]
+(Patch 4)[patches/0004-added-foo.patch]
+
+I could have added a coverletter, or followed the threaded presentation of the challenge.
+However, this makes much more sense.
+
 </details>
